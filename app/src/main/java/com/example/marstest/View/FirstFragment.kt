@@ -1,6 +1,7 @@
 package com.example.marstest.View
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ class FirstFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private val viewModel : MarsViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +67,19 @@ class FirstFragment : Fragment() {
         viewModel.todoMarte.observe(viewLifecycleOwner, Observer {
 
             adapter.updateData(it)
+
+            //captura bien el elemento seleccionado
             })
+
+        //primera pureba para enviar el elemento
+        adapter.terrenoSeleccionado.observe(viewLifecycleOwner){
+            it?.let {
+                viewModel.selected(it)
+                Log.d("*****ENVIANDO****", it.toString())
+                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+
+            }
+        }
 
 
 
