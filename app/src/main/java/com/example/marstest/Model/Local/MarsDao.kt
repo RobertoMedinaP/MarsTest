@@ -7,23 +7,23 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.marstest.Model.Remoto.MarsRealState
+import com.example.marstest.Model.Remoto.TerrenoDeMArte
 
 @Dao
 interface MarsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTerrain(mars: MarsRealState)
+    suspend fun insertarTerreno(mars: TerrenoDeMArte)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun inserTerrains(mars: List<MarsRealState>)
+    suspend fun insertarTodosLosTerrenos(mars: List<TerrenoDeMArte>)
 
 
 
     @Update
-    suspend fun updateTerrain(mars: MarsRealState)
+    suspend fun updateTerrain(mars: TerrenoDeMArte)
 
     @Delete
-    suspend fun  deleteTerrain(mars: MarsRealState)
+    suspend fun  deleteTerrain(mars: TerrenoDeMArte)
 
 
     @Query("DELETE FROM mars_table")
@@ -33,14 +33,14 @@ interface MarsDao {
     // traer todos los terrenos
 
     @Query("SELECT * FROM mars_table ORDER BY id DESC")
-    fun getAllTerrains(): LiveData<List<MarsRealState>>
+    fun obtenerTodosLosTerrenos(): LiveData<List<TerrenoDeMArte>>
 
 
     @Query("SELECT * FROM mars_table WHERE type=:type Limit 1")
-    fun getMarsType( type: String): LiveData<MarsRealState>
+    fun getMarsType( type: String): LiveData<TerrenoDeMArte>
 
 
     @Query("SELECT * FROM mars_table WHERE id=:id")
-    fun getMarsId(id:Int): LiveData<MarsRealState>
+    fun getMarsId(id:Int): LiveData<TerrenoDeMArte>
 
 }

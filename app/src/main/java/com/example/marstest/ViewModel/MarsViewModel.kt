@@ -7,75 +7,63 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.marstest.Model.Local.MarsDataBase
 import com.example.marstest.Model.MarsRepository
-import com.example.marstest.Model.Remoto.MarsRealState
+import com.example.marstest.Model.Remoto.TerrenoDeMArte
 import kotlinx.coroutines.launch
 
 class MarsViewModel (application: Application): AndroidViewModel(application) {
 
 
-    // parte 1 comunicar con el repository
+
 
     private val repository: MarsRepository
 
-    // parte 2
-    lateinit var liveDatafromInternet: LiveData<List<MarsRealState>>
-
-    // para mostrar todas las tareas   parte 2
-
-    val allTerrains: LiveData<List<MarsRealState>>
+    val todoMarte: LiveData<List<TerrenoDeMArte>>
 
     init {
 
-        //parte 1 funciona sin el dao
-        // repository= MarsRepository()
-        // liveDatafromInternet = repository.fetchDataMars()
 
-
-        // parte 2
         val MarsDao = MarsDataBase.getDataBase(application).getMarsDao()
         repository = MarsRepository(MarsDao)
 
-        // parte 2 con corrutinas y viewmodel
+        // Despertamos la corrutina
 
         viewModelScope.launch {
 
             repository.fetchDataFromInternetCoroutines()
         }
-        // cierre parte 2
 
-        allTerrains = repository.lisTAllMars
+        //guardamos la lista en todoMarte
+        todoMarte = repository.listaTodosLosTerrenos
 
-        /**********parte 1***********************/
-        liveDatafromInternet = repository.dataFromInternet
 
     }
 
 
 
-    //******************************Estos métodos son con el dao****************/
+    //Funciones del dao
     // funcion para seleccionar
     // guardar la seleccion en una mutableLiveDATA
 
-    private var selectedMarsTerrains: MutableLiveData<MarsRealState> = MutableLiveData()
+    private var selectedMarsTerrains: MutableLiveData<TerrenoDeMArte> = MutableLiveData()
 
-    fun selected(mars: MarsRealState) {
+    fun selected(mars: TerrenoDeMArte) {
         selectedMarsTerrains.value = mars
     }
 
-    fun selectedItem(): LiveData<MarsRealState> = selectedMarsTerrains
+    fun selectedItem(): LiveData<TerrenoDeMArte> = selectedMarsTerrains
 
 
-    fun inserTerrain(mars: MarsRealState) = viewModelScope.launch {
+    fun insertarTerreno(mars: TerrenoDeMArte) = viewModelScope.launch {
 
-        repository.inserTerrain(mars)
+        repository.insertarTerreno(mars)
     }
 
 
-    fun updateTerrain(mars: MarsRealState) = viewModelScope.launch {
+    fun updateTerrain(mars: TerrenoDeMArte) = viewModelScope.launch {
         repository.updateTerrain(mars)
     }
 
-    fun getTaskById(id:Int): LiveData<MarsRealState>{
+    fun getTaskById(id:Int): LiveData<TerrenoDeMArte>{
         return  repository.getTerrain(id)
     }
 }

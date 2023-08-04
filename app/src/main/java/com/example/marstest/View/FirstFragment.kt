@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.marstest.R
+import com.example.marstest.ViewModel.MarsAdapter
 import com.example.marstest.ViewModel.MarsViewModel
 import com.example.marstest.databinding.FragmentFirstBinding
 
@@ -40,12 +43,30 @@ class FirstFragment : Fragment() {
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+       /* //Observamos todoMarte y a eso le permitimos que el campo de texto sea llenado con eso
+       esta era la forma de llamar directo al textview
 
-        viewModel.allTerrains.observe(viewLifecycleOwner, Observer {
+        viewModel.todoMarte.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.textviewFirst.text=it.toString()
             }
-        })
+        })*/
+
+        /**Implementando el adapter y RV*/
+        val adapter=MarsAdapter()
+        binding.rv1.adapter=adapter
+        //el layout sera de tipo grid con 2 elementos
+        binding.rv1.layoutManager=GridLayoutManager(context,2)
+        binding.rv1.addItemDecoration(
+            DividerItemDecoration(context,
+            DividerItemDecoration.HORIZONTAL)
+        )
+
+        viewModel.todoMarte.observe(viewLifecycleOwner, Observer {
+
+            adapter.updateData(it)
+            })
+
 
 
     }

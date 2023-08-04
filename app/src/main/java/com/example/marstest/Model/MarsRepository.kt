@@ -4,50 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.marstest.Model.Local.MarsDao
-import com.example.marstest.Model.Remoto.MarsRealState
+import com.example.marstest.Model.Remoto.TerrenoDeMArte
 import com.example.marstest.Model.Remoto.RetrofitClient
 
 class MarsRepository (private val marsDao: MarsDao) {
 
 
-    // 1 llamar al método de conexion
+
     private val retrofitClient = RetrofitClient.getRetrofit()
-    //2 HACE REFERENCIA AL POJO Y LA RESPUESTA QUE VAMOS A RECIBIR
-    val dataFromInternet = MutableLiveData<List<MarsRealState>>()
+
+    val dataFromInternet = MutableLiveData<List<TerrenoDeMArte>>()
 
 
-    // vieja confiable
-   /* fun fetchDataMars(): LiveData<List<MarsRealState>> {
-        Log.d("REPO", "VIEJA CONFIABLE")
-        retrofitClient.fetchMarsData().enqueue(object : retrofit2.Callback<List<MarsRealState>> {
-            override fun onResponse(
-                call: Call<List<MarsRealState>>,
-                response: Response<List<MarsRealState>>
-            ) {
 
-                when (response.code()) {
-
-                    in 200..299 -> dataFromInternet.value = response.body()
-                    in 300..301 -> Log.d("REPO", "${response.code()} ---${response.errorBody()}")
-                    else -> Log.d("E", "${response.code()} ---${response.errorBody()}")
-                }
-
-
-            }
-
-            override fun onFailure(call: Call<List<MarsRealState>>, t: Throwable) {
-                Log.e("Error", " ${t.message}")
-            }
-
-        })
-
-        return dataFromInternet
-
-
-    }*/
-
-
-    // nueva Forma con coroutinas
+    //Forma con coroutinas
 
     suspend fun fetchDataFromInternetCoroutines() {
         try {
@@ -57,7 +27,7 @@ class MarsRepository (private val marsDao: MarsDao) {
                 in 200..299 -> response?.body().let {
                     if (it != null) {
                         // esta insertando en la base de datos Luego que creo la base de datos
-                        marsDao.inserTerrains(it)
+                        marsDao.insertarTodosLosTerrenos(it)
                     }
                 }
 
@@ -70,26 +40,26 @@ class MarsRepository (private val marsDao: MarsDao) {
     }
 
 
-    /********************+IMPLEMENTACIÓN DE DAO, LUEGO QUE CREO BASE DE DATOS*********/
-    /************ si quiero insertar sin base de datos no es necesario *********/
+
+    //funciones del DAO
 
 
-    fun  getTerrainByid(id:String) : LiveData<MarsRealState> {
+    fun  getTerrainByid(id:String) : LiveData<TerrenoDeMArte> {
         return getTerrainByid(id)
     }
 
     // listado de terrenos
-    val lisTAllMars : LiveData<List<MarsRealState>> =marsDao.getAllTerrains()
+    val listaTodosLosTerrenos: LiveData<List<TerrenoDeMArte>> =marsDao.obtenerTodosLosTerrenos()
 
 
     // insertar un terreno
-    suspend fun inserTerrain(mars: MarsRealState) {
-        marsDao.insertTerrain(mars)
+    suspend fun insertarTerreno(mars: TerrenoDeMArte) {
+        marsDao.insertarTerreno(mars)
     }
 
     // actualizar un terreno
 
-    suspend fun updateTerrain(mars: MarsRealState) {
+    suspend fun updateTerrain(mars: TerrenoDeMArte) {
         marsDao.updateTerrain(mars)
     }
 
@@ -97,9 +67,9 @@ class MarsRepository (private val marsDao: MarsDao) {
     suspend fun deleteAll() {
         marsDao.deleteAll()
     }
-    //traer terreno por id
+    //traer terreno por id??????
 
-    fun getTerrain(id:Int):LiveData<MarsRealState>{
+    fun getTerrain(id:Int):LiveData<TerrenoDeMArte>{
         return  marsDao.getMarsId(id)
     }}
 

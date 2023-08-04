@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.marstest.Model.Remoto.MarsRealState
+import com.example.marstest.Model.Remoto.TerrenoDeMArte
 
-@Database(entities = [MarsRealState::class],version=1)
+@Database(entities = [TerrenoDeMArte::class],version=1)
 abstract class MarsDataBase : RoomDatabase(){
 
-    //referencia al dao
+
     abstract fun getMarsDao(): MarsDao
 
     companion object {

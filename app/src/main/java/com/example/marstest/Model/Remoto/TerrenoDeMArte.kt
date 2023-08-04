@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "mars_table")
-data class MarsRealState(
+data class TerrenoDeMArte(
     @SerializedName("id")
     @PrimaryKey
     val id: String,
