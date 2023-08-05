@@ -50,9 +50,9 @@ class SecondFragment : Fragment() {
             it?.let {
                 seleccion->
                 Glide.with(binding.imageView2).load(it.img_src).centerCrop().into(binding.imageView2)
-                binding.textView.setText(seleccion.id)
-                binding.textView2.setText(seleccion.type)
-                binding.textView3.setText(seleccion.price.toString())
+                binding.textView.setText("Terreno número: "+seleccion.id)
+                binding.textView2.setText("Tipo de terreno: " +seleccion.type)
+                binding.textView3.setText("Precio: "+seleccion.price.toString())
                 terrenoSeleccionado=seleccion
             }
         }
